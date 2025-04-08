@@ -26,7 +26,7 @@ def analyze_layout(image_path, hf_token):
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "List all UI elements you can see in this interface. Focus on interactive elements, navigation, forms, and key features."},
+                    {"type": "text", "text": "List all UI elements you can see in this interface. Focus on interactive elements, navigation, forms, and key features. Keep the list concise and relevant. Do not include any non-interactive elements."},
                     {"type": "image", "image": image}
                 ]
             }
@@ -45,8 +45,8 @@ def analyze_layout(image_path, hf_token):
         # Generate response
         output = model.generate(
             **inputs,
-            max_new_tokens=200,
-            do_sample=False
+            max_new_tokens=100, ### Play around with this shit for best results
+            do_sample=False ### Tried this as true it was pretty cool but lwk mistral shit itself a lil
         )
         
         # Decode the response, skipping the prompt tokens
