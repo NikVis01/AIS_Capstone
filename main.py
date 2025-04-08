@@ -62,23 +62,24 @@ base_image = (
     cpu=4,
     allow_concurrent_inputs=1000
 )
-def scrape(url: str) -> dict:
+def scrape(url):
     """Modal function to scrape a website."""
     return scrape_website(url, "/scraper-volume")  # This will save screenshot.png in /scraper-volume
 
 @app.function(
     image=base_image,
     volumes={"/scraper-volume": scraper_volume},
+    #secrets=[modal.Secret.from_name("huggingface-secret")],
     gpu="A10G:2",
     cpu=8,
     timeout=3600,
     memory=32768,
     allow_concurrent_inputs=1000
 )
-def analyze(image_path: str) -> dict:
+def analyze(image_path, hf_token=[modal.Secret.from_name("huggingface-secret")]):
     """Modal function to analyze a screenshot."""
     # The screenshot is directly in /scraper/screenshot.png
-    return analyze_layout("/scraper-volume/screenshot.png")
+    return analyze_layout("/scraper-volume/screenshot.png", hf_token)
 
 @app.function(
     image=base_image,
@@ -89,7 +90,7 @@ def analyze(image_path: str) -> dict:
     memory=32768,
     allow_concurrent_inputs=1000
 )
-def get_ui_suggestions(predictions: list) -> dict:
+def get_ui_suggestions(predictions):
     """Modal function to get UI suggestions."""
     return analyze_ui(predictions)
 
