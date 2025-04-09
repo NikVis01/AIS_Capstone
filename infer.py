@@ -4,6 +4,8 @@ from PIL import Image
 import torch
 from typing import Dict, Any
 
+### Link to model used: https://huggingface.co/llava-hf/llava-1.5-7b-hf
+
 def analyze_layout(image_path, hf_token):
     """Analyzing UI screenshot with LLaVA 1.5."""
     try:

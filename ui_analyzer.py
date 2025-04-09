@@ -2,6 +2,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import torch
 from typing import Dict, Any, List
 
+### Link to model used: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3 
+
 def analyze_ui(predictions: list) -> dict:
     """Generate UI suggestions based on detected elements using Mistral-7B-Instruct."""
     try:
