@@ -27,8 +27,12 @@ IF YOUR NAME HAPPENS TO BE TIMOTHY LINDBLOM:
 ### Limitations and recognitions
 - I could have used GPT-4o for this since it can read UI from a link and give suggestions straight up
 - However; this is lame and boring. I learned more doing it this way. It works. 
-- Business use-case is slim if not non-existent. The base code can be fine tuned for an array of different applications such as:
+- Business use-case is slim if not non-existent for the current application. 
+
+The base code can be fine tuned for a wide scope of different applications such as:
 1. Landing page analysis and suggestions to onboard clients easier for Saas
 2. A/B testing of sign-in or checkout pages
 3. Instead of UI it could read legal documents, shipping offers, contracts, etc...
-4. And many more applications!
+4. Advertisment screening and marketing media suggestions (posters, blog formatting, email list content)
+5. Competitor comparison and feature updates; keep track of your competion and new features they add with scheduled runs of this app
+6. And many more!
