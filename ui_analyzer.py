@@ -23,7 +23,7 @@ def analyze_ui(predictions: list) -> dict:
         # Create prompt with detected elements
         elements_str = ", ".join(predictions)
         prompt = f"""<s>[INST] You are a UX expert. Based on these UI elements: {elements_str}, provide specific improvement suggestions. Focus on:
-1. Specific features on the website (e.g. chatbot, search bar, signup page, payment plans, contact info for customer service)
+1. Specific features on the website (e.g. chatbot, search bar, signup page, payment plans, contact info for customer service and more)
 2. User experience enhancements (e.g., better navigation or interaction)
 3. Cluttering of elements (too many elements on the page is really bad)
 4. Visual hierarchy (Is the site readable?)
@@ -36,7 +36,7 @@ Keep suggestions concise and actionable. Please return a list of max 10 improvem
         output = llm(
             prompt,
             max_new_tokens=200,
-            do_sample=True,
+            do_sample=False,
             temperature=0.7
         )
         suggestions = output[0]["generated_text"].split("[/INST]")[1].strip()

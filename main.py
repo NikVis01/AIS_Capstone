@@ -5,6 +5,8 @@ from pydantic import BaseModel, HttpUrl
 from typing import Callable
 import os
 
+### Testing URL: https://www.shopifyacademy.com/
+
 # Import our modules
 from modal_scraper import scrape_website
 from infer import analyze_layout
@@ -13,11 +15,11 @@ from ui_analyzer import analyze_ui
 # Create the Modal app
 app = modal.App("ui-analyzer")
 
-# Create volumes
+# Creating volumes (Note to self: cache model in model-volume for later)
 scraper_volume = modal.Volume.from_name("scraper-volume", create_if_missing=True)
 model_volume = modal.Volume.from_name("model-volume", create_if_missing=True)
 
-# Create a single base image with all dependencies
+# Creating a base image for all functions, tried to seperate but it shit itself
 base_image = (
     modal.Image.debian_slim(python_version="3.10")
     .apt_install(
@@ -78,7 +80,7 @@ def scrape(url):
 )
 def analyze(image_path, hf_token=[modal.Secret.from_name("huggingface-secret")]):
     """Modal function to analyze a screenshot."""
-    # The screenshot is directly in /scraper/screenshot.png
+    # The screenshot is directly in /scraper-volume/screenshot.png
     return analyze_layout("/scraper-volume/screenshot.png", hf_token)
 
 @app.function(
