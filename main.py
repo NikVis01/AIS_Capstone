@@ -70,8 +70,11 @@ def scrape(url):
 
 @app.function(
     image=base_image,
-    volumes={"/scraper-volume": scraper_volume},
-    #secrets=[modal.Secret.from_name("huggingface-secret")],
+    volumes={
+        "/scraper-volume": scraper_volume,
+        "/model-volume": model_volume
+    },
+    secrets=[modal.Secret.from_name("huggingface-secret")],
     gpu="A10G:2",
     cpu=8,
     timeout=3600,

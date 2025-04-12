@@ -3,6 +3,7 @@ from transformers import AutoProcessor, LlavaForConditionalGeneration
 from PIL import Image
 import torch
 from typing import Dict, Any
+import os
 
 ### Link to model used: https://huggingface.co/llava-hf/llava-1.5-7b-hf
 
@@ -11,14 +12,31 @@ def analyze_layout(image_path, hf_token):
     try:
         # Load LLaVA model and processor
         model_id = "llava-hf/llava-1.5-7b-hf"
-        model = LlavaForConditionalGeneration.from_pretrained(
-            model_id,
-            token=hf_token,
-            torch_dtype=torch.float16,
-            low_cpu_mem_usage=True
-        ).to(0)
         
-        processor = AutoProcessor.from_pretrained(model_id, token=hf_token)
+        # Check if model is cached in model_volume
+        model_path = "/model-volume/llava-1.5-7b-hf"
+        if os.path.exists(model_path):
+            print("Loading cached model...")
+            model = LlavaForConditionalGeneration.from_pretrained(
+                model_path,
+                token=hf_token,
+                torch_dtype=torch.float16,
+                low_cpu_mem_usage=True
+            ).to(0)
+            processor = AutoProcessor.from_pretrained(model_path, token=hf_token)
+        else:
+            print("Downloading and caching model...")
+            model = LlavaForConditionalGeneration.from_pretrained(
+                model_id,
+                token=hf_token,
+                torch_dtype=torch.float16,
+                low_cpu_mem_usage=True
+            ).to(0)
+            processor = AutoProcessor.from_pretrained(model_id, token=hf_token)
+            
+            # Cache the model
+            model.save_pretrained(model_path)
+            processor.save_pretrained(model_path)
         
         # Load image
         image = Image.open(image_path).convert('RGB')
