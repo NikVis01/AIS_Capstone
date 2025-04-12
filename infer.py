@@ -42,11 +42,15 @@ def analyze_layout(image_path, hf_token):
         image = Image.open(image_path).convert('RGB')
         
         # Define chat conversation with image
+        prompt = "List all the features you can see in this UI image. Format as numbered list. " \
+        "Focus on functional and interactive elements such as navigation, signup forms, course links, guides, offerings, pricing, etc. " \
+        "Make note of which colors are primarily used in the site (e.g if the site has vibrant and contrasting color schemes or not)"
+        
         conversation = [
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "List all UI elements you can see in this interface. Focus on interactive elements, navigation, forms, and key features. Keep the list concise and relevant. Do not include any non-interactive elements."},
+                    {"type": "text", "text": prompt},
                     {"type": "image", "image": image}
                 ]
             }
@@ -65,18 +69,19 @@ def analyze_layout(image_path, hf_token):
         # Generate response
         output = model.generate(
             **inputs,
-            max_new_tokens=100, ### Play around with this shit for best results
+            max_new_tokens=200, ### Play around with this shit for best results
             do_sample=False ### Tried this as true it was pretty cool but lwk mistral shit itself a lil
         )
         
         # Decode the response, skipping the prompt tokens
         description = processor.decode(output[0][2:], skip_special_tokens=True, use_fast=True)
-        
+        print(description)
         # Debug logging
-        print(f"Raw description: {description}")
+        # print(f"Raw description: {description}")
         
         # Split into lines and clean up
         lines = description.strip().split('\n')
+
         # Keep only numbered lines and clean them up
         elements = []
         for line in lines:

@@ -13,7 +13,7 @@ from infer import analyze_layout
 from ui_analyzer import analyze_ui
 
 # Create the Modal app
-app = modal.App("ui-analyzer")
+app = modal.App("visor")
 
 # Creating volumes (Note to self: cache model in model-volume for later)
 scraper_volume = modal.Volume.from_name("scraper-volume", create_if_missing=True)
@@ -75,7 +75,7 @@ def scrape(url):
         "/model-volume": model_volume
     },
     secrets=[modal.Secret.from_name("huggingface-secret")],
-    gpu="A10G:2",
+    gpu="H100",
     cpu=8,
     timeout=3600,
     memory=32768,
@@ -88,8 +88,9 @@ def analyze(image_path, hf_token=[modal.Secret.from_name("huggingface-secret")])
 
 @app.function(
     image=base_image,
+    volumes={"/model-volume": model_volume},
     secrets=[modal.Secret.from_name("huggingface-secret")],
-    gpu="A10G:2",
+    gpu="H100",
     cpu=8,
     timeout=3600,
     memory=32768,
@@ -115,21 +116,21 @@ def create_asgi() -> Callable:
         <!DOCTYPE html>
         <html>
         <head>
-            <title>UI Improvement Suggestinator</title>
+            <title>VISOR</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
             <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         </head>
-        <body>
+        <body class="bg-gray-100">
             <div class="max-w-2xl mx-auto p-8">
-                <h1 class="text-2xl mb-4">UI Analyzer</h1>
+                <h1 class="text-2xl mb-4 font-bold text-gray-900">Visor: UX Design Assistant</h1>
                 <form hx-post="/analyze" hx-target="#output" hx-indicator="#loading">
-                    <input type="url" name="url" class="border p-2 w-full" required placeholder="Enter website URL">
-                    <button type="submit" class="bg-blue-500 text-white p-2 mt-2 w-full">Analyze</button>
+                    <input type="url" name="url" class="border border-gray-300 p-2 w-full rounded focus:outline-none focus:border-black" required placeholder="Enter website URL">
+                    <button type="submit" class="bg-black text-white p-2 mt-2 w-full rounded hover:bg-gray-800 transition-colors">Analyze</button>
                 </form>
                 <div id="loading" class="htmx-indicator mt-4">
                     <div class="text-center">
-                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
-                        <p class="mt-2">Analyzing website...</p>
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-black border-t-transparent"></div>
+                        <p class="mt-2 text-gray-700">Checking out your website...</p>
                     </div>
                 </div>
                 <div id="output" class="mt-4"></div>
@@ -175,20 +176,20 @@ def create_asgi() -> Callable:
                 """
 
             print("Formatting results...")
-            elements_list = "".join([f"<li class='mb-1'>{p}</li>" for p in analysis["predictions"]])
+            elements_list = "".join([f"<li class='mb-1 text-gray-700'>{p}</li>" for p in analysis["predictions"]])
             return f"""
             <div class="bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-bold mb-4">Analysis Results</h2>
+                <h2 class="text-xl font-bold mb-4 text-gray-900">Analysis Results</h2>
                 
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-2">Detected UI Elements:</h3>
-                    <ul class="list-disc pl-5">{elements_list}</ul>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">Detected UI Elements:</h3>
+                    <ul class="list-disc pl-5 text-gray-700">{elements_list}</ul>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">Improvement Suggestions:</h3>
-                    <div class="bg-gray-50 p-4 rounded">
-                        <pre class="whitespace-pre-wrap">{suggestions["suggestions"]}</pre>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">Where to go from here:</h3>
+                    <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                        <pre class="whitespace-pre-wrap text-gray-700">{suggestions["suggestions"]}</pre>
                     </div>
                 </div>
             </div>

@@ -80,6 +80,7 @@ def scrape_website(url: str, output_dir: str) -> Dict[str, Any]:
                 "success": False,
                 "error": str(e)
             }
+            
         
         finally:
             browser.close() 

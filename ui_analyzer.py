@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 import torch
 from typing import Dict, Any, List
+import os
 
 ### Link to model used: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3 
 
@@ -12,32 +13,49 @@ def analyze_ui(predictions: list) -> dict:
         
         # Loading model and creating pipeline
         model_name = "mistralai/Mistral-7B-Instruct-v0.3"
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            torch_dtype="auto",
-            device_map="auto"
-        )
+        
+        # Check if model is cached in model_volume
+        model_path = "/model-volume/mistral-7b-instruct-v0.3"
+        if os.path.exists(model_path):
+            print("Loading cached Mistral model...")
+            tokenizer = AutoTokenizer.from_pretrained(model_path)
+            model = AutoModelForCausalLM.from_pretrained(
+                model_path,
+                torch_dtype="auto",
+                device_map="auto"
+            )
+        else:
+            print("Downloading and caching Mistral model...")
+            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            model = AutoModelForCausalLM.from_pretrained(
+                model_name,
+                torch_dtype="auto",
+                device_map="auto"
+            )
+            
+            # Cache the model
+            model.save_pretrained(model_path)
+            tokenizer.save_pretrained(model_path)
+        
         llm = pipeline("text-generation", model=model, tokenizer=tokenizer, use_fast=True)
         
         # Create prompt with detected elements
-        elements_str = ", ".join(predictions)
-        prompt = f"""<s>[INST] You are a UX expert. Based on these UI elements: {elements_str}, provide specific improvement suggestions. Focus on:
-1. Specific features on the website (e.g. chatbot, search bar, signup page, payment plans, contact info for customer service and more)
-2. User experience enhancements (e.g., better navigation or interaction)
-3. Cluttering of elements (too many elements on the page is really bad)
-4. Visual hierarchy (Is the site readable?)
-5. links to other pages (extensive docs for how to use the service is positive)
-6. Links to tutorials or courses (this is good for the user)
 
-Keep suggestions concise and actionable. Please return a list of max 10 improvements [/INST]"""
+        elements_str = ", ".join(predictions)
+        prompt = f"""<s>[INST] You are a UX expert for UI comprehension and readability. You are given the following description of the UI: f{elements_str}.
+        From this description return a list of suggestions for the page design specifically connecting to features in the description.
+        Certain UI features will be better or worse than others, make sure to include this perspective.
+        [/INST]
+        """
         
+        print(elements_str) # For debugging and such
+
         # Generating the suggestions!!!
         output = llm(
             prompt,
-            max_new_tokens=200,
-            do_sample=False,
-            temperature=0.7
+            max_new_tokens=300,
+            do_sample=True,
+            temperature=0.8
         )
         suggestions = output[0]["generated_text"].split("[/INST]")[1].strip()
         

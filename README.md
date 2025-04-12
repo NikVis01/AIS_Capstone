@@ -3,6 +3,12 @@
 By: Niklavs Visockis
 
 ## v1 of UI reading and analysis app 
+Core idea is that you input a link and it returns a list of ideas/design principles that you should keep in mind while developing and refining
+Design theory and UI ideas come largly from various online sources for UI design trends and guides for making intuitive and friendly UX
+
+Some theory used to back up prompting choices:
+https://www.appcues.com/blog/user-onboarding-starts-with-a-good-landing-page
+https://www.framer.com/blog/web-design-trends/
 
 ### Model Architecture: 
 - LLaVA-1.5 used for image-to-text returns list of detected UI elements from a screenshot
@@ -16,8 +22,8 @@ By: Niklavs Visockis
 - main.py creates base image and modal app importing the previously mentioned models from their respective files
 
 ### How to run:
-- deploy modal main
-- copy link that ends with "...modal.run" in browser
+- Deploy modal main
+- Copy link that ends with "...modal.run" in browser
 - Input a link of your choice and wait for containers to spin up
 - WARNING: The web app is implemented as a sync fasthtml app for sake of simplicity, it may take a while
 
@@ -25,9 +31,9 @@ IF YOUR NAME HAPPENS TO BE TIMOTHY LINDBLOM:
 - Im keeping the containers warm for you so just follow the following link and it should work fine: https://nikvis01--ui-analyzer-create-asgi.modal.run 
 
 ### Limitations and recognitions
-- I could have used GPT-4o for this since it can read UI from a link and give suggestions straight up
-- However; this is lame and boring. I learned more doing it this way. It works. 
+- I could have used GPT-4o for this since it can read UI from a link and give suggestions straight up. However; this is lame and boring. I learned more doing it this way. It works decently. 
 - Business use-case is slim if not non-existent for the current application. 
+- Bipassing Captcha is not implemented
 
 The base code can be fine tuned for a wide scope of different applications such as:
 1. Landing page analysis and suggestions to onboard clients easier for Saas
