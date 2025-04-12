@@ -44,7 +44,8 @@ def analyze_layout(image_path, hf_token):
         # Define chat conversation with image
         prompt = "List all the features you can see in this UI image. Format as numbered list. " \
         "Focus on functional and interactive elements such as navigation, signup forms, course links, guides, offerings, pricing, etc. " \
-        "Make note of which colors are primarily used in the site (e.g if the site has vibrant and contrasting color schemes or not)"
+        "Make note of which colors are primarily used in the site (e.g if the site has vibrant and contrasting color schemes or not)" \
+        "Be explicit about what kind of service the website provides (e.g ecommerce, video game, SaaS, startup, design store, etc )" # Changed this right now
 
         conversation = [
             {

@@ -45,8 +45,9 @@ def analyze_ui(predictions: list) -> dict:
         prompt = f"""<s>[INST] You are a UX expert for UI comprehension and readability. You are given the following description of the UI: f{elements_str}.
         From this description return a list of suggestions for the page design specifically connecting to features in the description.
         Certain UI features will be better or worse than others, make sure to include this perspective.
+        Give insights based off of the context of the website and depending on its function. 
         [/INST]
-        """
+        """ # Added last row just now
         
         print(elements_str) # For debugging and such
 
@@ -55,7 +56,7 @@ def analyze_ui(predictions: list) -> dict:
             prompt,
             max_new_tokens=400,
             do_sample=True,
-            temperature=0.8
+            temperature=1.5 # Was 0.8 and worked pretty well but was predictable & boring
         )
         suggestions = output[0]["generated_text"].split("[/INST]")[1].strip()
         

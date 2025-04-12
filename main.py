@@ -109,7 +109,7 @@ def get_ui_suggestions(predictions):
 @modal.asgi_app()
 def create_asgi() -> Callable:
     web_app = FastAPI()
-    
+
     @web_app.get("/", response_class=HTMLResponse)
     def home():
         return """
@@ -130,11 +130,10 @@ def create_asgi() -> Callable:
         <body style="background-color: Thistle;" class="text-blue-900">
             <div class="max-w-3xl mx-auto p-8">
                 <h1 style="font-family: 'Special Gothic Expanded One', sans-serif;" class="text-9xl font-bold text-blue-900 flex items-center gap-4">
-                    <img src="https://raw.githubusercontent.com/lethal365/UI_Analyzer_AIS/main/visor.png" alt="Visor Logo" class="w-24 h-24">
                     Visor
                 </h1>
 
-                <h2 class="text-xl font-bold mb-4 text-blue-900">Your UX design assistant</h2>
+                <h2 class="text-xl font-bold mb-4 text-blue-900">Wild AI suggestions for UX design</h2>
 
                 <form hx-post="/analyze" hx-target="#output" hx-indicator="#loading">
                     <input type="url" name="url" class="border border-blue-900 p-2 w-full rounded focus:outline-none focus:border-black" required placeholder="Enter website URL">
@@ -191,7 +190,7 @@ def create_asgi() -> Callable:
             print("Formatting results...")
             elements_list = "".join([f"<li class='mb-1 text-blue-900'>{p}</li>" for p in analysis["predictions"]])
             return f"""
-            <div class="bg-GreenYellow p-6 rounded-lg shadow">
+            <div class="bg-white p-6 rounded-lg shadow">
                 <h2 class="text-xl font-bold mb-4 text-blue-900">Analysis Results</h2>
                 
                 <div class="mb-6">
@@ -201,7 +200,7 @@ def create_asgi() -> Callable:
                 
                 <div>
                     <h3 class="text-lg font-semibold mb-2 text-blue-900">Where to go from here:</h3>
-                    <div class="bg-blue-900 p-4 rounded border border-blue-900">
+                    <div class="bg-white p-4 rounded border border-blue-900">
                         <pre class="whitespace-pre-wrap text-blue-900">{suggestions["suggestions"]}</pre>
                     </div>
                 </div>
