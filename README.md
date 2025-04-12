@@ -7,7 +7,9 @@ Core idea is that you input a link and it returns a list of ideas/design princip
 Design theory and UI ideas come largly from various online sources for UI design trends and guides for making intuitive and friendly UX
 
 Some theory used to back up prompting choices:
+
 https://www.appcues.com/blog/user-onboarding-starts-with-a-good-landing-page
+
 https://www.framer.com/blog/web-design-trends/
 
 ### Model Architecture: 
