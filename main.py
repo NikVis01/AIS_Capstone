@@ -118,19 +118,32 @@ def create_asgi() -> Callable:
         <head>
             <title>VISOR</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+            
+            <!-- GETTING A COOLER FONT -->
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+
             <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+            
         </head>
-        <body class="bg-gray-100">
-            <div class="max-w-2xl mx-auto p-8">
-                <h1 class="text-2xl mb-4 font-bold text-gray-900">Visor: UX Design Assistant</h1>
+        <body style="background-color: Thistle;" class="text-blue-900">
+            <div class="max-w-3xl mx-auto p-8">
+                <h1 style="font-family: 'Special Gothic Expanded One', sans-serif;" class="text-9xl font-bold text-blue-900 flex items-center gap-4">
+                    <img src="https://raw.githubusercontent.com/lethal365/UI_Analyzer_AIS/main/visor.png" alt="Visor Logo" class="w-24 h-24">
+                    Visor
+                </h1>
+
+                <h2 class="text-xl font-bold mb-4 text-blue-900">Your UX design assistant</h2>
+
                 <form hx-post="/analyze" hx-target="#output" hx-indicator="#loading">
-                    <input type="url" name="url" class="border border-gray-300 p-2 w-full rounded focus:outline-none focus:border-black" required placeholder="Enter website URL">
-                    <button type="submit" class="bg-black text-white p-2 mt-2 w-full rounded hover:bg-gray-800 transition-colors">Analyze</button>
+                    <input type="url" name="url" class="border border-blue-900 p-2 w-full rounded focus:outline-none focus:border-black" required placeholder="Enter website URL">
+                    <button type="submit" class="bg-blue-900 text-white p-2 mt-2 w-full rounded hover:bg-blue-600 transition-colors">Analyze</button>
                 </form>
                 <div id="loading" class="htmx-indicator mt-4">
                     <div class="text-center">
-                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-black border-t-transparent"></div>
-                        <p class="mt-2 text-gray-700">Checking out your website...</p>
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue border-t-transparent"></div>
+                        <p class="mt-2 text-blue-900">Checking out your website...</p>
                     </div>
                 </div>
                 <div id="output" class="mt-4"></div>
@@ -176,20 +189,20 @@ def create_asgi() -> Callable:
                 """
 
             print("Formatting results...")
-            elements_list = "".join([f"<li class='mb-1 text-gray-700'>{p}</li>" for p in analysis["predictions"]])
+            elements_list = "".join([f"<li class='mb-1 text-blue-900'>{p}</li>" for p in analysis["predictions"]])
             return f"""
-            <div class="bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-bold mb-4 text-gray-900">Analysis Results</h2>
+            <div class="bg-GreenYellow p-6 rounded-lg shadow">
+                <h2 class="text-xl font-bold mb-4 text-blue-900">Analysis Results</h2>
                 
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">Detected UI Elements:</h3>
-                    <ul class="list-disc pl-5 text-gray-700">{elements_list}</ul>
+                    <h3 class="text-lg font-semibold mb-2 text-blue-900">Detected UI Elements:</h3>
+                    <ul class="list-disc pl-5 text-blue-900">{elements_list}</ul>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">Where to go from here:</h3>
-                    <div class="bg-gray-50 p-4 rounded border border-gray-200">
-                        <pre class="whitespace-pre-wrap text-gray-700">{suggestions["suggestions"]}</pre>
+                    <h3 class="text-lg font-semibold mb-2 text-blue-900">Where to go from here:</h3>
+                    <div class="bg-blue-900 p-4 rounded border border-blue-900">
+                        <pre class="whitespace-pre-wrap text-blue-900">{suggestions["suggestions"]}</pre>
                     </div>
                 </div>
             </div>

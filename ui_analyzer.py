@@ -53,7 +53,7 @@ def analyze_ui(predictions: list) -> dict:
         # Generating the suggestions!!!
         output = llm(
             prompt,
-            max_new_tokens=350,
+            max_new_tokens=400,
             do_sample=True,
             temperature=0.8
         )

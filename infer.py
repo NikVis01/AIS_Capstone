@@ -32,7 +32,7 @@ def analyze_layout(image_path, hf_token):
                 torch_dtype=torch.float16,
                 low_cpu_mem_usage=True
             ).to(0)
-            processor = AutoProcessor.from_pretrained(model_id, token=hf_token)
+            processor = AutoProcessor.from_pretrained(model_id, token=hf_token, use_fast=True)
             
             # Cache the model
             model.save_pretrained(model_path)
@@ -45,7 +45,7 @@ def analyze_layout(image_path, hf_token):
         prompt = "List all the features you can see in this UI image. Format as numbered list. " \
         "Focus on functional and interactive elements such as navigation, signup forms, course links, guides, offerings, pricing, etc. " \
         "Make note of which colors are primarily used in the site (e.g if the site has vibrant and contrasting color schemes or not)"
-        
+
         conversation = [
             {
                 "role": "user",
@@ -91,7 +91,7 @@ def analyze_layout(image_path, hf_token):
                 cleaned = re.sub(r'^\d+\.\s*', '', line.strip())
                 if cleaned:
                     elements.append(cleaned)
-        
+    
         return {
             "success": True,
             "description": description,  # Keep raw description for debugging
@@ -103,4 +103,4 @@ def analyze_layout(image_path, hf_token):
         return {
             "success": False,
             "error": str(e)
-        }
+    }
