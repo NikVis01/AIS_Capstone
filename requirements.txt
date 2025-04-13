@@ -1,14 +1,8 @@
 playwright==1.41.2
 beautifulsoup4==4.12.3
-selenium==4.18.1
-webdriver-manager==4.0.1 
 transformers==4.37.2
 torch==2.2.0
-torchvision==0.17.0
-numpy==1.26.0
 pillow==10.2.0
-streamlit==1.32.0
 modal
 fastapi==0.110.0
 uvicorn==0.27.1
-pydantic==2.6.3
