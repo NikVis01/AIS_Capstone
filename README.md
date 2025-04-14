@@ -1,5 +1,5 @@
 
-# KTH AI Society Fullstack AI course capstone project!!!
+# KTH AI Society Fullstack AI course capstone project: Visor AI
 By: Niklavs Visockis
 
 ## v1 of UI reading and analysis app 
