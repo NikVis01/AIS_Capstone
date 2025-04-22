@@ -27,7 +27,7 @@ https://www.framer.com/blog/web-design-trends/
 - Deploy modal main
 - Copy link that ends with "...modal.run" in browser
 - Input a link of your choice and wait for containers to spin up
-- WARNING: The web app is implemented as a sync fasthtml app for sake of simplicity, it may take a while
+- WARNING: The web app is implemented as a sync fasthtml app for sake of simplicity, it may take a while to run
 
 ### Limitations and recognitions
 - I could have used GPT-4o for this since it can read UI from a link and give suggestions straight up. However; this is lame and boring. I learned more doing it this way. It works decently. 
