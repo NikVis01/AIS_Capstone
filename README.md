@@ -29,9 +29,6 @@ https://www.framer.com/blog/web-design-trends/
 - Input a link of your choice and wait for containers to spin up
 - WARNING: The web app is implemented as a sync fasthtml app for sake of simplicity, it may take a while
 
-IF YOUR NAME HAPPENS TO BE TIMOTHY LINDBLOM:
-- Im keeping the containers warm for you so just follow the following link and it should work fine: https://nikvis01--ui-analyzer-create-asgi.modal.run 
-
 ### Limitations and recognitions
 - I could have used GPT-4o for this since it can read UI from a link and give suggestions straight up. However; this is lame and boring. I learned more doing it this way. It works decently. 
 - Business use-case is slim if not non-existent for the current application. 
