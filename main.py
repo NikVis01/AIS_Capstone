@@ -20,6 +20,7 @@ scraper_volume = modal.Volume.from_name("scraper-volume", create_if_missing=True
 model_volume = modal.Volume.from_name("model-volume", create_if_missing=True)
 
 # Creating a base image for all functions, tried to seperate but it shit itself
+# I know this looks like a crazy number of downloads but roll with it
 base_image = (
     modal.Image.debian_slim(python_version="3.10")
     .apt_install(
@@ -83,7 +84,8 @@ def scrape(url):
 )
 def analyze(image_path, hf_token=[modal.Secret.from_name("huggingface-secret")]):
     """Modal function to analyze a screenshot."""
-    # The screenshot is directly in /scraper-volume/screenshot.png
+
+    # The screenshot is directly in /scraper-volume/screenshot.png, no /data subfolder
     return analyze_layout("/scraper-volume/screenshot.png", hf_token)
 
 @app.function(
@@ -153,6 +155,9 @@ def create_asgi() -> Callable:
 
     @web_app.post("/analyze", response_class=HTMLResponse)
     async def analyze_url(url: str = Form(...)):
+        """
+        Shoutout cursor for frontend.
+        """
         print("Starting analysis...")
         try:
             print(f"Processing URL: {url}")

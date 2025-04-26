@@ -6,11 +6,11 @@ import os
 ### Link to model used: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3 
 
 def analyze_ui(predictions: list) -> dict:
-    """Generate UI suggestions based on detected elements using Mistral-7B-Instruct."""
+    """
+    Generate UI suggestions based on detected elements using Mistral-7B-Instruct.
+    Simple error handling is included to make sure the model is loaded correctly.
+    """
     try:
-        ### Wondering if i shouldn't remove duplicate elements/readings from predictions.
-        ### Keeping them for now so that the model can see if the page is cluttered.
-        
         # Loading model and creating pipeline
         model_name = "mistralai/Mistral-7B-Instruct-v0.3"
         
@@ -33,13 +33,13 @@ def analyze_ui(predictions: list) -> dict:
                 device_map="auto"
             )
             
-            # Cache the model
+            # Caching the model, this drastically reduces the loading time for subsequent calls
             model.save_pretrained(model_path)
             tokenizer.save_pretrained(model_path)
         
         llm = pipeline("text-generation", model=model, tokenizer=tokenizer, use_fast=True)
         
-        # Create prompt with detected elements
+        # Creating a prompt with detected elements
 
         elements_str = ", ".join(predictions)
         prompt = f"""<s>[INST] You are a UX expert for UI comprehension and readability. You are given the following description of the UI: f{elements_str}.
@@ -47,7 +47,7 @@ def analyze_ui(predictions: list) -> dict:
         Certain UI features will be better or worse than others, make sure to include this perspective.
         Give insights based off of the context of the website and depending on its function. 
         [/INST]
-        """ # Added last row just now
+        """
         
         print(elements_str) # For debugging and such
 

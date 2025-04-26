@@ -33,14 +33,13 @@ def scrape_website(url: str, output_dir: str) -> Dict[str, Any]:
             print(f"Scraping URL: {url}")
             page.goto(url, wait_until="networkidle")
             
-            # Get page dimensions
+            # Getting page dimensions
             page_height = page.evaluate("document.documentElement.scrollHeight")
             page_width = page.evaluate("document.documentElement.scrollWidth")
             
-            # Set viewport to full page size
+            # THIS IS REALLY IMPORTANT: Setting the viewport size to the page dimensions so we can take a full-page screenshot
             page.set_viewport_size({"width": page_width, "height": page_height})
             
-            # Take full-page screenshot
             screenshot_path = os.path.join(output_dir, "screenshot.png")
             page.screenshot(
                 path=screenshot_path,
@@ -49,7 +48,8 @@ def scrape_website(url: str, output_dir: str) -> Dict[str, Any]:
             
             html_content = page.content()
             
-            # Extract data
+            # Extracting html data OBS Currently not used in the analysis
+            # but can be used for future analysis and training/fine tuning of models
             data = {
                 "url": str(url),
                 "timestamp": str(datetime.now().strftime('%Y%m%d_%H%M%S')),
@@ -61,7 +61,6 @@ def scrape_website(url: str, output_dir: str) -> Dict[str, Any]:
                 "html_data": extract_html_data(html_content)
             }
             
-            # Save metadata
             json_path = os.path.join(output_dir, "metadata.json")
             with open(json_path, 'w') as f:
                 json.dump(data, f, indent=2)

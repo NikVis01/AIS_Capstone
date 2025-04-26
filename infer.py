@@ -8,12 +8,18 @@ import os
 ### Link to model used: https://huggingface.co/llava-hf/llava-1.5-7b-hf
 
 def analyze_layout(image_path, hf_token):
-    """Analyzing UI screenshot with LLaVA 1.5."""
+    """
+    Analyzing UI screenshot with LLaVA 1.5.
+    Simple error handling is included to make sure the model is loaded correctly.
+
+    Initially chose to use pretrained LLaVA 1.5 model for its capabilities in understanding and generating text based on images,
+    Given the nature of the task, it was a good fit for analyzing UI elements in screenshots without needing to fine-tune the model.
+    """
     try:
-        # Load LLaVA model and processor
+        # Loading LLaVA model and processor
         model_id = "llava-hf/llava-1.5-7b-hf"
         
-        # Check if model is cached in model_volume
+        # Checking if model is cached in model_volume
         model_path = "/model-volume/llava-1.5-7b-hf"
         if os.path.exists(model_path):
             print("Loading cached model...")
@@ -34,11 +40,11 @@ def analyze_layout(image_path, hf_token):
             ).to(0)
             processor = AutoProcessor.from_pretrained(model_id, token=hf_token, use_fast=True)
             
-            # Cache the model
+            # Caching the model
             model.save_pretrained(model_path)
             processor.save_pretrained(model_path)
         
-        # Load image
+        # Loading image
         image = Image.open(image_path).convert('RGB')
         
         # Define chat conversation with image
@@ -57,17 +63,17 @@ def analyze_layout(image_path, hf_token):
             }
         ]
         
-        # Apply chat template
+        # Applying chat template (check out the processor docs for more details)
         prompt = processor.apply_chat_template(conversation, add_generation_prompt=True)
         
-        # Process inputs
+        # Processing inputs
         inputs = processor(
             images=image,
             text=prompt,
             return_tensors="pt"
         ).to(0, torch.float16)
         
-        # Generate response
+        # Generating response
         output = model.generate(
             **inputs,
             max_new_tokens=200, ### Play around with this shit for best results
@@ -77,26 +83,32 @@ def analyze_layout(image_path, hf_token):
         # Decode the response, skipping the prompt tokens
         description = processor.decode(output[0][2:], skip_special_tokens=True, use_fast=True)
         print(description)
+
         # Debug logging
         # print(f"Raw description: {description}")
         
-        # Split into lines and clean up
+        # Splitting into lines and clean up
         lines = description.strip().split('\n')
 
-        # Keep only numbered lines and clean them up
+
+        """
+        This part below can probably be optimized, but its essentially for normalizing responses we get from the model.
+        Keeping only numbered lines and cleaning them up.
+        """
         elements = []
         for line in lines:
-            # Match lines that start with a number and period (e.g., "1.", "2.", etc.)
+            # Matching lines that start with a number and period (e.g., "1.", "2.", etc.)
             if re.match(r'^\d+\.', line.strip()):
-                # Remove the number and period, then strip whitespace
+                # Removing the number and period, then strip whitespace 
+                # (I think weird white spaces are an issue for some text-gen models unsure if thats the case here but better safe than sorry)
                 cleaned = re.sub(r'^\d+\.\s*', '', line.strip())
                 if cleaned:
                     elements.append(cleaned)
     
         return {
             "success": True,
-            "description": description,  # Keep raw description for debugging
-            "predictions": elements  # Send cleaned numbered list to Mistral
+            "description": description,  # Keeping raw description for debugging
+            "predictions": elements  # Sending cleaned numbered list to Mistral
         }
         
     except Exception as e:
