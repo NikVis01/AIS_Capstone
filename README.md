@@ -29,7 +29,7 @@ https://www.framer.com/blog/web-design-trends/
 - Input a link of your choice and wait for containers to spin up
 - WARNING: The web app is implemented as a sync fasthtml app for sake of simplicity, it may take a while to run
 
-### Limitations and recognitions
+### Limitations
 - I could have used GPT-4o for this since it can read UI from a link and give suggestions straight up. However; this is lame and boring. I learned more doing it this way. It works decently. 
 - Business use-case is slim if not non-existent for the current application. 
 - Bipassing Captcha is not implemented
@@ -40,4 +40,3 @@ The base code can be fine tuned for a wide scope of different applications such 
 3. Instead of UI it could read legal documents, shipping offers, contracts, etc...
 4. Advertisment screening and marketing media suggestions (posters, blog formatting, email list content)
 5. Competitor comparison and feature updates; keep track of your competion and new features they add with scheduled runs of this app
-6. And many more!

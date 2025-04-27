@@ -67,7 +67,9 @@ base_image = (
 )
 def scrape(url):
     """Modal function to scrape a website."""
-    return scrape_website(url, "/scraper-volume")  # This will save screenshot.png in /scraper-volume
+    result = scrape_website(url, "/scraper-volume")  # This will save screenshot.png in /scraper-volume
+    scraper_volume.commit()  # Commit the volume to ensure persistence
+    return result
 
 @app.function(
     image=base_image,
