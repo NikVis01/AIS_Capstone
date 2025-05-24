@@ -15,6 +15,8 @@ https://www.appcues.com/blog/user-onboarding-starts-with-a-good-landing-page
 
 https://www.framer.com/blog/web-design-trends/
 
+![image](https://github.com/user-attachments/assets/cad1d844-3bba-4b11-9617-bab8a81d90af)
+
 ### Model Architecture: 
 - LLaVA-1.5 used for image-to-text returns list of detected UI elements from a screenshot
 - Mistral-7b takes list of UI elements and returns a list of suggestions for improvements
